@@ -8,9 +8,13 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./container/login/login";
 import Register from "./container/register/register";
 import reducers from "./reducer";
-import './config'
 import AuthRoute from './component/authroute';
-import Bossinfo from './container/bossinfo';
+import BossInfo from './container/bossinfo';
+import GeniusInfo from './container/geniusinfo';
+import Dashboard from './component/dashboard';
+import Chat from './component/chat';
+import './index.css'
+import './config'
 
 const reduxDevtools = window.devToolsExtension
     ? window.devToolsExtension()
@@ -20,20 +24,18 @@ const store = createStore(reducers, compose(
     reduxDevtools
 ) );
 
-function Boss() {
-    return <h2>Boss Pages</h2>
-}
-
 ReactDom.render(
     (<Provider store={store} >
         <BrowserRouter>
             <div>
                 <AuthRoute></AuthRoute>
                 <Switch>
-                    <Route path="/bossinfo" component={Bossinfo}></Route>
-                    <Route path="/boss" component={Boss}></Route>
+                    <Route path="/bossinfo" component={BossInfo}></Route>
+                    <Route path="/geniusinfo" component={GeniusInfo}></Route>
                     <Route path="/login" component={Login}></Route>
                     <Route path="/register" component={Register}></Route>
+                    <Route path="/chat/:user" component={Chat}/>
+                    <Route component={Dashboard}></Route>
                 </Switch>
             </div>
         </BrowserRouter>
