@@ -4,6 +4,7 @@ const utils = require('utility')
 const model = require('./model')
 
 const User = model.getModel('user')
+const Chat = model.getModel('chat')
 const Router = express.Router();
 const _filter = { pwd: 0, __v: 0}
 
@@ -68,6 +69,40 @@ Router.post('/update', function(req, res) {
         }, body)
         return res.json({ code: 0, data: data })        
     })
+})
+
+// chat
+Router.get('/getmsglist', function(req, res) {
+        let users = {}
+    const { userid } = req.cookies;
+    User.find({}, function(e, d) {
+        d.forEach(v => {
+            users[v._id] = {name: v.user, avatar: v.avatar}
+        });
+    })
+    // { '@or': [{ from: user, to: user }] }
+    Chat.find({ '$or': [{ from: userid }, { to: userid}]}, function(e, d) {
+        if (!e) {
+            return res.json({code: 0, msgs: d, users: users})
+        }
+    })
+})
+Router.post('/readmsg', function(req, res) {
+    const { userid } = req.cookies;
+    const {from} = req.body
+
+    Chat.update(
+        { from, to: userid},
+        {'$set': {read: true}},
+        {'multi': true},
+        function(e, d) {
+        console.log(d)
+        if (!e) {
+            return res.json({ code: 0, num: d.nModified})
+        }
+        return res.json({code: 1, msg: '已读请求失败'})
+    })
+    
 })
 
 function md5Pwd(pwd) {
