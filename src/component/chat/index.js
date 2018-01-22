@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
 import { List, InputItem, NavBar, Icon, Grid} from 'antd-mobile';
 import {connect} from 'react-redux';
+import QueueAnim from 'rc-queue-anim';
 
 import { getMsgList, sendMsg, recvMsg, readMsg } from '../../redux/chat.redux';
 import { getChatId } from '../../util';
-const socket = io('ws://localhost:9097')
 
 @connect(
     state => state,
@@ -50,28 +49,30 @@ class Chat extends Component {
                 >
                     {users[userid].name}
                 </NavBar>
-
-                {chatmsgs.map(v => {
-                    const avatar = require(`../img/${users[v.from].avatar}.png`)
-                    return v.from === userid ? (
-                        <List key={v._id}>
-                            <List.Item
-                                thumb={avatar}
-                            >
-                                {v.content}
-                            </List.Item>
-                        </List>
-                    ): (
+                <QueueAnim delay={100} type={'left'}>
+                    {chatmsgs.map(v => {
+                        const avatar = require(`../img/${users[v.from].avatar}.png`)
+                        return v.from === userid ? (
                             <List key={v._id}>
                                 <List.Item
-                                    extra={<img src={avatar}/>}
-                                    className='chat-me'
+                                    thumb={avatar}
                                 >
                                     {v.content}
                                 </List.Item>
                             </List>
-                    )
-                })}
+                        ) : (
+                                <List key={v._id}>
+                                    <List.Item
+                                        extra={<img src={avatar} alt="avatar" />}
+                                        className='chat-me'
+                                    >
+                                        {v.content}
+                                    </List.Item>
+                                </List>
+                            )
+                    })}
+                </QueueAnim>
+
                 <div className="stick-footer">
                     <List>
                         <InputItem

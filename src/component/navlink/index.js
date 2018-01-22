@@ -21,29 +21,27 @@ class NavLinkBar extends Component {
         const navList = this.props.data.filter(v => !v.hide)
         const {pathname} = this.props.location
         return (
-            <div>
-                <TabBar
-                    unselectedTintColor="#949494"
-                    tintColor="#33A3F4"
-                    barTintColor="white"
-                    hidden={this.state.hidden}
-                >
+            <TabBar
+                unselectedTintColor="#949494"
+                tintColor="#33A3F4"
+                barTintColor="white"
+                hidden={this.state.hidden}
+            >
                 {navList.map(v => (
-                        <TabBar.Item
-                            badge={v.path === '/msg'? this.props.unread : ''}
-                            title={v.text}
-                            key={v.path}
-                            icon={{uri: require(`./img/${v.icon}.png`)}}
-                            selectedIcon={{ uri: require(`./img/${v.icon}-active.png`) }}
-                            selected={pathname === v.path}
-                            onPress={() => {
-                                this.props.history.push(v.path)
-                            }}
-                        >
-                        </TabBar.Item>
-                    ))}
-                </TabBar>
-            </div>
+                    <TabBar.Item
+                        badge={v.path === '/msg'? this.props.unread : ''}
+                        title={v.text}
+                        key={v.path}
+                        icon={{uri: require(`./img/${v.icon}.png`)}}
+                        selectedIcon={{ uri: require(`./img/${v.icon}-active.png`) }}
+                        selected={pathname === v.path}
+                        onPress={() => {
+                            this.props.history.push(v.path)
+                        }}
+                    >
+                    </TabBar.Item>
+                ))}
+            </TabBar>
         );
     }
 }

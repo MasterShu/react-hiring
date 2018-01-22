@@ -40,15 +40,13 @@ export function register({ user, pwd, repeatpwd, type}) {
         return errorMsg('两次密码输入不一致')
     }
 
-    return dispatch => {
-        axios.post('/user/register', { user, pwd, type })
-            .then(res => {
-                if (res.status === 200 && res.data.code === 0) {
-                    dispatch(authSuccess({user, pwd, type})) 
-                } else {
-                    dispatch(errorMsg(res.data.msg))
-                }
-            })
+    return async dispatch => {
+        const res =await axios.post('/user/register', { user, pwd, type })
+        if (res.status === 200 && res.data.code === 0) {
+            dispatch(authSuccess({ user, pwd, type }))
+        } else {
+            dispatch(errorMsg(res.data.msg))
+        }
     }
 }
 
@@ -57,42 +55,36 @@ export function login({user, pwd}) {
         return errorMsg('用户名密码必须输入')
     }
 
-    return dispatch => {
-        axios.post('/user/login', { user, pwd })
-            .then(res => {
-                if (res.status === 200 && res.data.code === 0) {
-                    dispatch(authSuccess(res.data.data))
-                } else {
-                    dispatch(errorMsg(res.data.msg))
-                }
-            })
+    return async dispatch => {
+        const res = await axios.post('/user/login', { user, pwd })
+        if (res.status === 200 && res.data.code === 0) {
+            dispatch(authSuccess(res.data.data))
+        } else {
+            dispatch(errorMsg(res.data.msg))
+        }
     }
 }
 
-export function userinfo() {
-    axios.get('/user/info')
-        .then(res => {
-            if (res.status === 200) {
-                if (res.data.code === 0) {
+export async function  userinfo() {
+    const res = await axios.get('/user/info')
+    if (res.status === 200) {
+        if (res.data.code === 0) {
 
-                } else {
-                    this.props.loadData(res.data.data)
-                    this.props.history.push('/login')
-                }
-            }
-        });
+        } else {
+            this.props.loadData(res.data.data)
+            this.props.history.push('/login')
+        }
+    }
 }
 
 export function update(data) {
-    return dispatch => {
-        axios.post('/user/update', data)
-            .then(res => {
-                if (res.status === 200 && res.data.code === 0) {
-                    dispatch(authSuccess(res.data.data))
-                } else {
-                    dispatch(errorMsg(res.data.msg))
-                }
-            })
+    return async dispatch => {
+        const res = await axios.post('/user/update', data)
+        if (res.status === 200 && res.data.code === 0) {
+            dispatch(authSuccess(res.data.data))
+        } else {
+            dispatch(errorMsg(res.data.msg))
+        }
     }
 }
 
