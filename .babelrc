@@ -3,6 +3,7 @@
         "react-app"
     ],
     "plugins": [
+        "react-hot-loader/babel",
         "transform-decorators-legacy",
         [
             "import",

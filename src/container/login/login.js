@@ -25,6 +25,10 @@ class Login extends React.Component{
     register() {
         this.props.history.push('/register')
     }
+    handleLogin(){
+        console.log('is login...')
+        this.props.login(this.props.state)
+    }
     render(){
         const redirectTo = this.props.redirectTo;
         return(
@@ -50,9 +54,6 @@ class Login extends React.Component{
                 </WingBlank>
             </div>
         ) 
-    }
-    handleLogin(){
-        this.props.login(this.props.state)
     }
 }
 
