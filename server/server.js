@@ -14,8 +14,9 @@ import { StaticRouter } from "react-router-dom";
 import staticPath from '../build/asset-manifest';
 import App from '../src/App';
 import reducers from '../src/reducer';
-import model from'./model'
-import userRouter from'./user'
+import model from './model'
+import userRouter from './user'
+import adminRouter from './admin'
 const Chat = model.getModel('chat')
 
 assethook({
@@ -44,6 +45,7 @@ io.on('connection', function (socket) {
 app.use(cookieParse())
 app.use(bodyParser.json())
 app.use('/user', userRouter)
+app.use('/api', adminRouter)
 app.use(function(req, res, next) {
     if (req.url.startsWith('/user/') || req.url.startsWith('/static/')) {
         return next()
